@@ -1,5 +1,5 @@
 import streamlit as st
-from PIL import Image
+import re
 from deta import Deta
 
 # Initialize Deta instance
@@ -75,7 +75,7 @@ def main():
         email = st.text_input("Email", key='email')
         cohort = st.text_input("Cohort", key='cohort')
         course_type = st.selectbox("Course Type", ["Excel", "PowerBI", "Tableau", "SQL", "Word File"], key='course_type')
-        file = st.file_uploader("Upload File", type=["txt", "pdf", "png", "jpg", "sql", "pbix", "twb", "ipynb", "xlsx", "docx"], key='file')
+        google_drive_link = st.text_input("Google Drive Link", key='google_drive_link')
 
         # Submit button
         if st.button("Submit", key='submit_button'):
@@ -87,17 +87,18 @@ def main():
                     "cohort": cohort,
                     "course_type": course_type
                 }
-                if file:
-                    file_content = file.read()
-                    file_name = file.name
-                    user_data["file_name"] = file_name
-                    # Store the file in Deta Base
-                    file_id = user_db.put(file_content, key=file_name)
+                if google_drive_link:
+                    # Extract file ID from Google Drive link
+                    file_id = extract_file_id(google_drive_link)
                     user_data["file_id"] = file_id
 
                 user_db.put(user_data)
                 st.markdown("<div class='success-message'>User information submitted successfully!</div>", unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
+
+def extract_file_id(link):
+    match = re.search(r"(?<=/d/|id=|open\?id=|file/d/)([\w-]{25,})", link)
+    return match.group(0) if match else None
 
 if __name__ == "__main__":
     main()
