@@ -4,7 +4,7 @@ import re
 from deta import Deta
 
 # Initialize Deta instance
-deta = Deta('a0ag86iehzb_ihh53tZCEbJPDMKBBmmxLxCKekK6hAdS')
+deta = Deta("a0ag86iehzb_jHqmAVqNPg9WLTVVe6LHZTH3HQrQNXZo")
 user_db = deta.Base('assignment_collection')
 
 # Streamlit app
