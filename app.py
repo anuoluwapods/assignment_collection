@@ -1,4 +1,5 @@
 import streamlit as st
+from PIL import Image
 import re
 from deta import Deta
 
