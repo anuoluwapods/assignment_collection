@@ -75,7 +75,7 @@ def main():
         name = st.text_input("Name", key='name')
         email = st.text_input("Email", key='email')
         cohort = st.text_input("Cohort", key='cohort')
-        course_type = st.selectbox("Course Type", ["Excel", "PowerBI", "Tableau", "SQL", "Word File"], key='course_type')
+        course_type = st.selectbox("Course Type", ["Select Option","Excel", "PowerBI", "Tableau", "SQL", "Word File"], key='course_type')
         google_drive_link = st.text_input("Google Drive Link", key='google_drive_link')
 
         # Submit button
