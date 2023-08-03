@@ -76,7 +76,8 @@ def main():
         email = st.text_input("Email", key='email')
         cohort = st.text_input("Cohort", key='cohort')
         course_type = st.selectbox("Course Type", ["Select Option","Excel", "PowerBI", "Tableau", "SQL", "Word File"], key='course_type')
-        google_drive_link = st.text_input("Google Drive Link", key='google_drive_link')
+        website_link = st.text_input("Google Drive Link Link", key='website_link')
+
 
         # Submit button
         if st.button("Submit", key='submit_button'):
@@ -88,10 +89,8 @@ def main():
                     "cohort": cohort,
                     "course_type": course_type
                 }
-                if google_drive_link:
-                    # Extract file ID from Google Drive link
-                    file_id = extract_file_id(google_drive_link)
-                    user_data["google_drive_link"] = google_drive_link  # Store the entire link
+                if website_link:
+                    user_data["website_link"] = website_link
 
                 user_db.put(user_data)
                 st.markdown("<div class='success-message'>User information submitted successfully!</div>", unsafe_allow_html=True)
