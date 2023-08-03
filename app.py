@@ -91,7 +91,7 @@ def main():
                 if google_drive_link:
                     # Extract file ID from Google Drive link
                     file_id = extract_file_id(google_drive_link)
-                    user_data["file_id"] = file_id
+                    user_data["google_drive_link"] = google_drive_link  # Store the entire link
 
                 user_db.put(user_data)
                 st.markdown("<div class='success-message'>User information submitted successfully!</div>", unsafe_allow_html=True)
