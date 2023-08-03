@@ -4,7 +4,7 @@ import re
 from deta import Deta
 
 # Initialize Deta instance
-deta = Deta(st.secrets["data_key"])
+deta = Deta(st.secrets["deta_key"])
 user_db = deta.Base('assignment_collection')
 
 # Streamlit app
