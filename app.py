@@ -1,7 +1,7 @@
 import streamlit as st
 from PIL import Image
-import re
 from deta import Deta
+import os
 
 # Initialize Deta instance
 deta = Deta(st.secrets["deta_key"])
@@ -75,9 +75,10 @@ def main():
         name = st.text_input("Name", key='name')
         email = st.text_input("Email", key='email')
         cohort = st.text_input("Cohort", key='cohort')
-        course_type = st.selectbox("Course Type", ["Select Option","Excel", "PowerBI", "Tableau", "SQL", "Word File"], key='course_type')
-        website_link = st.text_input("Google Drive Link Link", key='website_link')
+        course_type = st.selectbox("Course Type", ["Select Option","Excel", "Python", "PowerBI", "Tableau", "SQL", "Word File"], key='course_type')
 
+        # File upload
+        uploaded_file = st.file_uploader("Upload File (Word Document, Python Notebook, PowerBI File, Excel File, Tableau File, Text File)", type=["docx", "ipynb", "pbix", "xlsx", "twb", "txt"])
 
         # Submit button
         if st.button("Submit", key='submit_button'):
@@ -89,16 +90,16 @@ def main():
                     "cohort": cohort,
                     "course_type": course_type
                 }
-                if website_link:
-                    user_data["website_link"] = website_link
+                
+                if uploaded_file is not None:
+                    file_extension = os.path.splitext(uploaded_file.name)[1]
+                    file_data = uploaded_file.read()
+                    user_data["file_extension"] = file_extension
+                    user_data["file_data"] = file_data
 
                 user_db.put(user_data)
                 st.markdown("<div class='success-message'>User information submitted successfully!</div>", unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
-
-def extract_file_id(link):
-    match = re.search(r"(?<=/d/|id=|open\?id=|file/d/)([\w-]{25,})", link)
-    return match.group(0) if match else None
 
 if __name__ == "__main__":
     main()
