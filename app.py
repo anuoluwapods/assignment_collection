@@ -34,10 +34,10 @@ def main():
         name = st.text_input("Name", key='name')
         email = st.text_input("Email", key='email')
         cohort = st.text_input("Cohort", key='cohort')
-        course_type = st.selectbox("Course Type", ["Select Option","Excel","Python",  "PowerBI", "Tableau", "SQL", "Word File"], key='course_type')
+        course_type = st.selectbox("Course Type", ["Select Option","Excel", "PowerBI", "Tableau", "SQL", "Word File"], key='course_type')
 
         # File upload
-        uploaded_file = st.file_uploader("Upload File (Word Document, Python Notebook, PowerBI, Excel, Tableau, Text File)", type=["docx", "ipynb", "pbix", "xlsx", "twb", "txt"])
+        uploaded_file = st.file_uploader("Upload File (Word, .ipynb, PowerBI, Excel, Tableau, Text)", type=["docx", "ipynb", "pbix", "xlsx", "twb", "txt"])
 
         # Submit button
         if st.button("Submit", key='submit_button'):
@@ -52,9 +52,12 @@ def main():
                 
                 if uploaded_file is not None:
                     # Save the uploaded file to Deta drive
-                    file = user_drive.put(uploaded_file)
-                    user_data["file_name"] = uploaded_file.name
-                    user_data["file_url"] = file.url
+                    file_data = uploaded_file.read()
+                    file_name = uploaded_file.name
+                    user_drive.put(file_name, file_data)
+
+                    user_data["file_name"] = file_name
+                    user_data["file_url"] = user_drive.get(file_name).url
 
                 user_db.put(user_data)
                 st.markdown("<div class='success-message'>User information submitted successfully!</div>", unsafe_allow_html=True)
