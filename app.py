@@ -54,10 +54,10 @@ def main():
                     # Save the uploaded file to Deta drive
                     file_data = uploaded_file.read()
                     file_name = uploaded_file.name
-                    user_drive.put(file_name, file_data)
+                    file = user_drive.put(file_name, file_data)
 
                     user_data["file_name"] = file_name
-                    user_data["file_url"] = user_drive.get(file_name).url
+                    user_data["file_url"] = file.url
 
                 user_db.put(user_data)
                 st.markdown("<div class='success-message'>User information submitted successfully!</div>", unsafe_allow_html=True)
