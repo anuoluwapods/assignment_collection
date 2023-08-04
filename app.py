@@ -1,11 +1,11 @@
 import streamlit as st
-from PIL import Image
 from deta import Deta
 import base64
 
 # Initialize Deta instance
 deta = Deta(st.secrets["deta_key"])
 user_db = deta.Base('assignment_collection')
+user_drive = deta.Drive('assignment')
 
 # Streamlit app
 def main():
@@ -33,7 +33,7 @@ def main():
         name = st.text_input("Name", key='name')
         email = st.text_input("Email", key='email')
         cohort = st.text_input("Cohort", key='cohort')
-        course_type = st.selectbox("Course Type", ["Select Option","Excel", "Python", "PowerBI", "Tableau", "SQL", "Word File"], key='course_type')
+        course_type = st.selectbox("Course Type", ["Select Option","Excel","Python",  "PowerBI", "Tableau", "SQL", "Word File"], key='course_type')
 
         # File upload
         uploaded_file = st.file_uploader("Upload File (Word Document, Python Notebook, PowerBI, Excel, Tableau, Text File)", type=["docx", "ipynb", "pbix", "xlsx", "twb", "txt"])
@@ -50,8 +50,10 @@ def main():
                 }
                 
                 if uploaded_file is not None:
+                    # Save the uploaded file to Deta drive
+                    file = user_drive.put(uploaded_file)
                     user_data["file_name"] = uploaded_file.name
-                    user_data["file_data"] = base64.b64encode(uploaded_file.read()).decode()
+                    user_data["file_url"] = file.url
 
                 user_db.put(user_data)
                 st.markdown("<div class='success-message'>User information submitted successfully!</div>", unsafe_allow_html=True)
