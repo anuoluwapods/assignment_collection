@@ -57,7 +57,7 @@ def main():
                     file = user_drive.put(file_name, file_data)
 
                     user_data["file_name"] = file_name
-                    user_data["file_url"] = file.url
+                    user_data["file_url"] = f"https://drive.deta.sh/{st.secrets['deta_key']}/{file_name}"
 
                 user_db.put(user_data)
                 st.markdown("<div class='success-message'>User information submitted successfully!</div>", unsafe_allow_html=True)
